@@ -5,17 +5,18 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
-    <string name="nav_item_profile">My Profile</string>
-    <string name="nav_item_projects">My Projects</string>
-    <string name="nav_item_today">Today</string>
-    <string name="nav_item_nextDays">Next 7 Days</string>
+    <string name="nav_profile">My Profile</string>
+    <string name="nav_projects">My Projects</string>
+    <string name="nav_today">Today</string>
+    <string name="nav_nextDays">Next 7 Days</string>
+    <string name="nav_about_us">About Us</string>
 
     <!-- navigation drawer item labels  -->
-    <string-array name="nav_drawer_labels">
-        <item>@string/nav_item_profile</item>
-        <item>@string/nav_item_projects</item>
-        <item>@string/nav_item_today</item>
-        <item>@string/nav_item_nextDays</item>
+    <string-array name="nav_item_activity_titles">
+        <item>@string/nav_profile</item>
+        <item>@string/nav_projects</item>
+        <item>@string/nav_today</item>
+        <item>@string/nav_nextDays</item>
     </string-array>
 
     <string name="title_profile">My Profile</string>
@@ -24,6 +25,16 @@
     <string name="title_nextDays">Next 7 Days</string>
     <string name="title_assignTask">Assign Task</string>
     <string name="title_taskDetails">Task Details</string>
+    <string name="activity_title_about_us">About Us</string>
+    <string name="activity_title_privacy_policy">Privacy Policy</string>
+
+    <string name="action_clear_all">Clear All</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_mark_all_read">Mark All as Read</string>
+    <string name="privacy_policy">Privacy Policy</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

@@ -1,7 +1,9 @@
-package com.example.teodora.employeetaskmanager;
+package com.example.teodora.employeetaskmanager.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.teodora.employeetaskmanager.R;
 
 public class MainActivity extends AppCompatActivity {
 

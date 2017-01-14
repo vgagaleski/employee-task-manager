@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="AppTheme" parent="MyMaterialTheme.Base"></style>
+    <style name="MyMaterialTheme" parent="MyMaterialTheme.Base"></style>
     <!-- Base application theme. -->
     <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
