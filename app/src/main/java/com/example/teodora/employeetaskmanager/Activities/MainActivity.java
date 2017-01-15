@@ -6,9 +6,13 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,12 +26,18 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.teodora.employeetaskmanager.Fragments.ContactsFragment;
 import com.example.teodora.employeetaskmanager.Fragments.MyProfileFragment;
 import com.example.teodora.employeetaskmanager.Fragments.MyProjectsFragment;
+import com.example.teodora.employeetaskmanager.Fragments.MyTasksFragment;
 import com.example.teodora.employeetaskmanager.Fragments.NextDaysFragment;
 import com.example.teodora.employeetaskmanager.Fragments.TodayFragment;
 import com.example.teodora.employeetaskmanager.Other.CircleTransform;
 import com.example.teodora.employeetaskmanager.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private NavigationView navigationView;
@@ -37,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtName, txtWebsite;
     private Toolbar toolbar;
     private FloatingActionButton fab;
+
+    // This is for the tabs
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
 
     // urls to load navigation header background image
     // and profile image
@@ -65,8 +80,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Tabs
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        // End tabs
 
         mHandler = new Handler();
 
@@ -92,7 +118,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // load nav menu header data
+
+             // load nav menu header data
         loadNavHeader();
 
         // initializing navigation menu
@@ -102,6 +129,46 @@ public class MainActivity extends AppCompatActivity {
             navItemIndex = 0;
             CURRENT_TAG = TAG_PROFILE;
             loadHomeFragment();
+        }
+    }
+
+
+
+    //Tabs
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new MyTasksFragment(), "MY TASKS");
+        adapter.addFragment(new ContactsFragment(), "CONTACTS");
+        viewPager.setAdapter(adapter);
+    }
+
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
         }
     }
 
