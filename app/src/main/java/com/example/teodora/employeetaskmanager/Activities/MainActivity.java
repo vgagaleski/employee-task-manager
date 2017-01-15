@@ -27,11 +27,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.teodora.employeetaskmanager.Fragments.ContactsFragment;
-import com.example.teodora.employeetaskmanager.Fragments.MyProfileFragment;
-import com.example.teodora.employeetaskmanager.Fragments.MyProjectsFragment;
 import com.example.teodora.employeetaskmanager.Fragments.MyTasksFragment;
-import com.example.teodora.employeetaskmanager.Fragments.NextDaysFragment;
-import com.example.teodora.employeetaskmanager.Fragments.TodayFragment;
 import com.example.teodora.employeetaskmanager.Other.CircleTransform;
 import com.example.teodora.employeetaskmanager.R;
 
@@ -69,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     public static String CURRENT_TAG = TAG_PROFILE;
 
     // toolbar titles respected to selected nav menu item
-    private String[] activityTitles;
+//    private String[] activityTitles;
 
     // flag to load home fragment when user presses back key
     private boolean shouldLoadHomeFragOnBackPress = true;
@@ -81,7 +77,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Adding Toolbar to Main screen
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Task Manager"); // Od Viktor
         setSupportActionBar(toolbar);
 
         //Tabs
@@ -108,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
 
         // load toolbar titles from string resources
-        activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
+//        activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
         selectNavMenu();
 
         // set toolbar title
-        setToolbarTitle();
+//        setToolbarTitle();
 
         // if user select the current navigation menu again, don't do anything
         // just close the navigation drawer
@@ -229,11 +227,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // update the main content by replacing fragments
-                Fragment fragment = getHomeFragment();
+//                Fragment fragment = getHomeFragment();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                         android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+//                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
                 fragmentTransaction.commitAllowingStateLoss();
             }
         };
@@ -253,37 +251,37 @@ public class MainActivity extends AppCompatActivity {
         invalidateOptionsMenu();
     }
 
-    private Fragment getHomeFragment() {
-        switch (navItemIndex) {
-            case 0:
-                // my profile
-                MyProfileFragment myProfileFragment = new MyProfileFragment();
-                return myProfileFragment;
-            case 1:
-                // my projects
-                MyProjectsFragment myProjectsFragment = new MyProjectsFragment();
-                return myProjectsFragment;
-            case 2:
-                // today fragment
-                TodayFragment todayFragment = new TodayFragment();
-                return todayFragment;
-            case 3:
-                // notifications fragment
-                NextDaysFragment nextDaysFragment = new NextDaysFragment();
-                return nextDaysFragment;
-
+//    private Fragment getHomeFragment() {
+//        switch (navItemIndex) {
+//            case 0:
+//                // my profile
+//                MyProfileFragment myProfileFragment = new MyProfileFragment();
+//                return myProfileFragment;
+//            case 1:
+//                // my projects
+//                MyProjectsFragment myProjectsFragment = new MyProjectsFragment();
+//                return myProjectsFragment;
+//            case 2:
+//                // today fragment
+//                TodayFragment todayFragment = new TodayFragment();
+//                return todayFragment;
+//            case 3:
+//                // notifications fragment
+//                NextDaysFragment nextDaysFragment = new NextDaysFragment();
+//                return nextDaysFragment;
+//
 //            case 4:
 //                // settings fragment
 //                SettingsFragment settingsFragment = new SettingsFragment();
 //                return settingsFragment;
-            default:
-                return new MyProfileFragment();
-        }
-    }
+//            default:
+//                return new NextDaysFragment();
+//        }
+//    }
 
-    private void setToolbarTitle() {
-        getSupportActionBar().setTitle(activityTitles[navItemIndex]);
-    }
+//    private void setToolbarTitle() {
+//        getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+//    }
 
     private void selectNavMenu() {
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
@@ -300,23 +298,43 @@ public class MainActivity extends AppCompatActivity {
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
+//                    case R.id.nav_profile:
+//                        navItemIndex = 0;
+//                        CURRENT_TAG = TAG_PROFILE;
+//                        break;
+//                    case R.id.nav_projects:
+//                        navItemIndex = 1;
+//                        CURRENT_TAG = TAG_PROJECTS;
+//                        break;
+//                    case R.id.nav_today:
+//                        navItemIndex = 2;
+//                        CURRENT_TAG = TAG_TODAY;
+//                        break;
+//                    case R.id.nav_nextDays:
+//                        navItemIndex = 3;
+//                        CURRENT_TAG = TAG_NEXTDAYS;
+//                        break;
                     case R.id.nav_profile:
-                        navItemIndex = 0;
-                        CURRENT_TAG = TAG_PROFILE;
-                        break;
+                        // launch new intent instead of loading fragment
+                        startActivity(new Intent(MainActivity.this, MyProfileActivity.class));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_projects:
-                        navItemIndex = 1;
-                        CURRENT_TAG = TAG_PROJECTS;
-                        break;
+                        // launch new intent instead of loading fragment
+                        startActivity(new Intent(MainActivity.this, MyProjectsActivity.class));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_today:
-                        navItemIndex = 2;
-                        CURRENT_TAG = TAG_TODAY;
-                        break;
+                        // launch new intent instead of loading fragment
+                        startActivity(new Intent(MainActivity.this, TodayActivity.class));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_nextDays:
-                        navItemIndex = 3;
-                        CURRENT_TAG = TAG_NEXTDAYS;
-                        break;
-                     case R.id.nav_about_us:
+                        // launch new intent instead of loading fragment
+                        startActivity(new Intent(MainActivity.this, NextDaysActivity.class));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_about_us:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(MainActivity.this, AboutUsActivity.class));
                         drawer.closeDrawers();

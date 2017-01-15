@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.teodora.employeetaskmanager">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -18,7 +18,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.AboutUsActivity" />
-        <activity android:name=".Activities.PrivacyPolicyActivity"></activity>
+        <activity android:name=".Activities.PrivacyPolicyActivity" />
+        <activity android:name=".Activities.MyProfileActivity" />
+        <activity android:name=".Activities.MyProjectsActivity" />
+        <activity android:name=".Activities.TodayActivity" />
+        <activity android:name=".Activities.NextDaysActivity"></activity>
     </application>
 
 </manifest>
