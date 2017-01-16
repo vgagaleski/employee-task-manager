@@ -1,7 +1,5 @@
 package com.example.teodora.employeetaskmanager.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,9 +14,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class FirstDayFragment extends Fragment {
+public class ThirdDayFragment extends Fragment {
 
-    public FirstDayFragment() {
+    public ThirdDayFragment() {
         // Required empty public constructor
     }
 
@@ -34,6 +32,15 @@ public class FirstDayFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_first_day, container, false);
+
+
+        //Calendar
+        Date d = Calendar.getInstance().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE dd"); // Set your date format
+        String currentData = sdf.format(d); // Get Date String according to date format
+
+        TextView showDate = (TextView) view.findViewById(R.id.calendarTextView);
+        showDate.setText(currentData);
 
         return view;
     }
