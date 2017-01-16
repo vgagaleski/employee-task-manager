@@ -40,6 +40,14 @@
     <string name="prompt_email">someone@example.com</string>
     <string name="prompt_mobile_phone">Mobile phone</string>
     <string name="prompt_address">Address</string>
+    <string name="three">Three</string>
+    <string name="task_name">Task</string>
+    <string name="project_name">Project</string>
+    <string name="asignee_name">Asignee</string>
+    <string name="dueDateText">Due date</string>
+    <string name="locationText">Location</string>
+    <string name="descriptionText">Description</string>
+    <string name="priorityText">Priority</string>
 
 
 </resources>

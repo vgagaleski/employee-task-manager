@@ -22,7 +22,8 @@
         <activity android:name=".Activities.MyProfileActivity" />
         <activity android:name=".Activities.MyProjectsActivity" />
         <activity android:name=".Activities.TodayActivity" />
-        <activity android:name=".Activities.NextDaysActivity"></activity>
+        <activity android:name=".Activities.NextDaysActivity" />
+        <activity android:name=".Activities.AssignTaskActivity"></activity>
     </application>
 
 </manifest>

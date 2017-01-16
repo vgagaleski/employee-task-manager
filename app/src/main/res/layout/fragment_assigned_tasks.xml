@@ -1,10 +1,9 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.teodora.employeetaskmanager.Fragments.MyTasksFragment">
-
+    tools:context="com.example.teodora.employeetaskmanager.Fragments.AssignedTasksFragment">
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -15,17 +14,15 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        app:elevation="10dp"
+        app:elevation="5dp"
         app:backgroundTint="@color/colorAccent" />
-
-
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/three"
+        android:text="@string/two"
         android:textSize="40dp"
         android:textStyle="bold"
         android:layout_centerInParent="true" />
 
-</RelativeLayout>
+</FrameLayout>
