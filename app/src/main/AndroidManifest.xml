@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
-        <activity android:name=".Activities.LoginActivity">
+        <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,7 +29,7 @@
         <activity android:name=".Activities.TodayActivity" />
         <activity android:name=".Activities.NextDaysActivity" />
         <activity android:name=".Activities.AssignTaskActivity" />
-        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.LoginActivity" />
         <activity android:name=".Activities.RegisterActivity"></activity>
     </application>
 
