@@ -22,4 +22,23 @@
     <dimen name="card_margin">10dp</dimen>
     <dimen name="card_radius">5dp</dimen>
     <dimen name="very_small_txt_size">12dp</dimen>
+
+
+    <!--Text dimensions-->
+    <dimen name="large_txt_size">30sp</dimen>
+    <dimen name="medium_txt_size">25sp</dimen>
+    <!--<dimen name="small_txt_size">20sp</dimen>-->
+    <!--<dimen name="very_small_txt_size">15sp</dimen>-->
+    <dimen name="very_very_small_txt_size">10sp</dimen>
+
+    <dimen name="login_buttons_text_size">15.3sp</dimen>
+
+    <dimen name="ButtonHeight">32dp</dimen>
+
+    <dimen name="logo_image_size">130dp</dimen>
+
+    <dimen name="margin_small">16dp</dimen>
+    <dimen name="lists_title_bottom_margin">13dp</dimen>
+    <dimen name="lists_title_top_margin">13dp</dimen>
+
 </resources>

@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 import com.example.teodora.employeetaskmanager.Activities.AssignTaskActivity;
 import com.example.teodora.employeetaskmanager.R;
+import com.github.lzyzsd.circleprogress.CircleProgress;
+import com.github.lzyzsd.circleprogress.DonutProgress;
 
 public class MyTasksFragment extends Fragment {
 
@@ -32,6 +34,9 @@ public class MyTasksFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_tasks, container, false);
 
+//        DonutProgress circleProgress = (DonutProgress) view.findViewById(R.id.donut_progress);
+//        circleProgress.setPivotX(55);
+//        circleProgress.setPivotY(55);
 
 
 

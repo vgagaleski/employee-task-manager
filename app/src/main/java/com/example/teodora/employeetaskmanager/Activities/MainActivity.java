@@ -31,6 +31,7 @@ import com.example.teodora.employeetaskmanager.Fragments.ContactsFragment;
 import com.example.teodora.employeetaskmanager.Fragments.MyTasksFragment;
 import com.example.teodora.employeetaskmanager.Other.CircleTransform;
 import com.example.teodora.employeetaskmanager.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -436,7 +437,10 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
-            Toast.makeText(getApplicationContext(), "Logout user!", Toast.LENGTH_LONG).show();
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent (this, LoginActivity.class);
+            startActivity(intent);
+            //Toast.makeText(getApplicationContext(), "Logout user!", Toast.LENGTH_LONG).show();
             return true;
         }
 

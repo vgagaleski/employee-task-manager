@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "122917362743",
+    "firebase_url": "https://fir-authapp-8cff7.firebaseio.com",
+    "project_id": "fir-authapp-8cff7",
+    "storage_bucket": "fir-authapp-8cff7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122917362743:android:493e865644e537f6",
+        "android_client_info": {
+          "package_name": "com.example.teodora.employeetaskmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "122917362743-ptrdku5qbbnmrur5tfi5g9quesdk27ns.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrVZr1di2vD1sVhaxw82D-suw50MGUVMg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
