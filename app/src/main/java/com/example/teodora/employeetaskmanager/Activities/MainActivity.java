@@ -459,6 +459,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
     // show or hide the fab
 //    private void toggleFab() {
 //        if (navItemIndex == 0)

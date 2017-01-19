@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.teodora.employeetaskmanager.Activities.AssignTaskActivity;
 import com.example.teodora.employeetaskmanager.R;
@@ -29,6 +30,7 @@ public class AssignedTasksFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_assigned_tasks, container, false);
+
 
 
         // Floating Action Button Click Listener
