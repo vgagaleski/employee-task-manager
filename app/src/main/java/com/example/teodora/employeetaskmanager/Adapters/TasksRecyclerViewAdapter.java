@@ -2,12 +2,15 @@ package com.example.teodora.employeetaskmanager.Adapters;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.teodora.employeetaskmanager.Activities.MainActivity;
 import com.example.teodora.employeetaskmanager.Models.TaskModel;
 import com.example.teodora.employeetaskmanager.R;
 import com.github.lzyzsd.circleprogress.DonutProgress;
@@ -19,13 +22,19 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
 
     private List<TaskModel> taskModelList;
 
+
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
+
         public TextView taskName, taskDueDate;
         public LinearLayout taskPriority;
         public DonutProgress taskPercentage;
 
+
+
         public MyViewHolder(View view) {
             super(view);
+            Log.d("Inserting new team: ", "Inserting ..");
             taskPriority = (LinearLayout) view.findViewById(R.id.taskPriority);
             taskName = (TextView) view.findViewById(R.id.taskName);
             taskDueDate = (TextView) view.findViewById(R.id.taskDueDate);
@@ -48,15 +57,19 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+
+        Log.d("Inserting new team1: ", "Inserting ..");
         TaskModel taskModel = taskModelList.get(position);
         holder.taskPriority.setBackgroundColor(Color.parseColor(taskModel.getTaskPriority()));
         holder.taskName.setText(taskModel.getTaskName());
         holder.taskDueDate.setText(taskModel.getTaskDueDate());
         holder.taskPercentage.setProgress(Integer.parseInt(taskModel.getTaskPercentage()));
-        holder.taskPercentage.setFinishedStrokeColor(R.color.colorPrimary);
-        holder.taskPercentage.setUnfinishedStrokeColor(R.color.iron);
-        holder.taskPercentage.setFinishedStrokeWidth((float) 6.0);
-        holder.taskPercentage.setUnfinishedStrokeWidth(6);
+        holder.taskPercentage.setFinishedStrokeColor(Color.parseColor("#00BCD4"));
+        holder.taskPercentage.setUnfinishedStrokeColor(Color.parseColor("#CCCCCC"));
+        holder.taskPercentage.setFinishedStrokeWidth((float) 14.0);
+        holder.taskPercentage.setTextColor(Color.parseColor("#00BCD4"));
+        holder.taskPercentage.setUnfinishedStrokeWidth(14);
+        holder.taskPercentage.setTextSize((float)26.0);
     }
 
     @Override

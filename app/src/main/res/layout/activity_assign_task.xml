@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
-                    android:id="@+id/AsigneeName"
+                    android:id="@+id/etAsigneeName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
@@ -52,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
-                    android:id="@+id/TaskName"
+                    android:id="@+id/etTaskName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
-                    android:id="@+id/ProjectName"
+                    android:id="@+id/etProjectName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
@@ -97,6 +97,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/dueDateLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -123,15 +124,16 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
+                        android:clickable="false"
                         android:textSize="@dimen/small_txt_size"
                         android:textColor="@color/primaryText"
                         android:text="@string/dueDateText" />
 
                     <TextView
+                        android:id="@+id/etDueDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
+                        android:clickable="false"
                         android:textSize="@dimen/very_small_txt_size"
                         android:textColor="@color/primaryText"
                         android:hint="Today" />
@@ -148,6 +150,7 @@
                 android:background="#c0c0c0"/>
 
             <LinearLayout
+                android:id="@+id/priorityLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -174,15 +177,16 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
+                        android:clickable="false"
                         android:textSize="@dimen/small_txt_size"
                         android:textColor="@color/primaryText"
                         android:text="@string/priorityText" />
 
                     <TextView
+                        android:id="@+id/etPriority"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
+                        android:clickable="false"
                         android:textSize="@dimen/very_small_txt_size"
                         android:textColor="@color/primaryText"
                         android:hint="Medium" />
@@ -199,6 +203,7 @@
                 android:background="#c0c0c0"/>
 
             <LinearLayout
+                android:id="@+id/descriptionLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -225,15 +230,16 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
+                        android:clickable="false"
                         android:textSize="@dimen/small_txt_size"
                         android:textColor="@color/primaryText"
                         android:text="@string/descriptionText" />
 
                     <TextView
+                        android:id="@+id/etDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
+                        android:clickable="false"
                         android:textSize="@dimen/very_small_txt_size"
                         android:textColor="@color/primaryText"
                         android:hint="No description" />
@@ -250,6 +256,7 @@
                 android:background="#c0c0c0"/>
 
             <LinearLayout
+                android:id="@+id/locationLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -276,15 +283,16 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
+                        android:clickable="false"
                         android:textSize="@dimen/small_txt_size"
                         android:textColor="@color/primaryText"
                         android:text="@string/locationText" />
 
                     <TextView
+                        android:id="@+id/etLocation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
+                        android:clickable="false"
                         android:textSize="@dimen/very_small_txt_size"
                         android:textColor="@color/primaryText"
                         android:hint="No location" />

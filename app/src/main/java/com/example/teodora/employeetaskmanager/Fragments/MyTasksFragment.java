@@ -33,11 +33,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class MyTasksFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class MyTasksFragment extends Fragment  { //implements SwipeRefreshLayout.OnRefreshListener
 
 
     private RecyclerView recyclerView;
-    private SwipeRefreshLayout swipeRefreshLayout;
+//    private SwipeRefreshLayout swipeRefreshLayout;
     private ArrayList<TaskModel> tasksList = new ArrayList<>();
 
 
@@ -69,6 +69,12 @@ public class MyTasksFragment extends Fragment implements SwipeRefreshLayout.OnRe
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_tasks, container, false);
 
+        if (view.getVisibility() == View.VISIBLE) {
+            Toast.makeText(getContext(),"Helllooooo", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getContext(),"Goodbye", Toast.LENGTH_LONG).show();
+        }
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
@@ -76,19 +82,19 @@ public class MyTasksFragment extends Fragment implements SwipeRefreshLayout.OnRe
         recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(this);
+//        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+//        swipeRefreshLayout.setOnRefreshListener(this);
 
         fetchData();
 
-        swipeRefreshLayout.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        swipeRefreshLayout.setRefreshing(true);
-                                        fetchData();
-                                    }
-                                }
-        );
+//        swipeRefreshLayout.post(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        swipeRefreshLayout.setRefreshing(true);
+//                                        fetchData();
+//                                    }
+//                                }
+//        );
 
 
 
@@ -113,12 +119,14 @@ public class MyTasksFragment extends Fragment implements SwipeRefreshLayout.OnRe
         return view;
     }
 
-    @Override
-    public void onRefresh() {
-        fetchData();
-    }
+//    @Override
+//    public void onRefresh() {
+//        fetchData();
+//    }
 
     private void fetchData() {
+
+//        Toast.makeText(getContext(), "vo fetch data", Toast.LENGTH_LONG).show();
         if (checkInternetConnection()){
 
             Query getTasksQuery = mDatabaseTasks.orderByChild("taskAssigneeId").equalTo(currentUserNameId);
@@ -145,19 +153,20 @@ public class MyTasksFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 public void onCancelled(DatabaseError databaseError) {
 
                     Log.e("Database Error: " ,"No databaseSnapshot caused by" + databaseError);
-                    swipeRefreshLayout.setRefreshing(false);
+//                    swipeRefreshLayout.setRefreshing(false);
 
                 }
             });
 
             TasksRecyclerViewAdapter tasksRecyclerViewAdapter = new TasksRecyclerViewAdapter(tasksList);
-            swipeRefreshLayout.setRefreshing(false);
+//            swipeRefreshLayout.setRefreshing(false);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(tasksRecyclerViewAdapter);
 
         }
         else
             Toast.makeText(getContext(), "No Internet connection", Toast.LENGTH_LONG).show();
-        swipeRefreshLayout.setRefreshing(false);
+//        swipeRefreshLayout.setRefreshing(false);
     }
 
 

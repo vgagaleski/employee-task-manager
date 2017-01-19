@@ -21,15 +21,15 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
         // Adding Toolbar to AssignTask screen
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Assign task");
+        toolbar.setTitle("Task details");
         setSupportActionBar(toolbar);
 
         TaskModel taskModel = (TaskModel)getIntent().getSerializableExtra("taskDetails");
 
         String color = taskModel.getTaskPriority();
-        if (color.equals(R.color.highPriorityTask)) priority="High";
-        else if (color.equals(R.color.mediumPriorityTask)) priority="Medium";
-        else if (color.equals(R.color.lowPriorityTask)) priority="Low";
+        if (color.equals("#e91e63"))priority="High";
+        else if (color.equals("#66bb6a")) priority="Medium";
+        else if (color.equals("#b0bec5")) priority="Low";
 
 
         textView1 = (TextView) findViewById(R.id.txt_assignee);
