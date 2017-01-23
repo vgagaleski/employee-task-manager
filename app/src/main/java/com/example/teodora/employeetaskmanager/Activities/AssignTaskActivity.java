@@ -1,9 +1,16 @@
 package com.example.teodora.employeetaskmanager.Activities;
 
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,16 +18,39 @@ import android.support.v7.app.AlertDialog.Builder;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AutoCompleteTextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import com.example.teodora.employeetaskmanager.Adapters.ContactsAdapter;
+import com.example.teodora.employeetaskmanager.Adapters.ContactsRecyclerViewAdapter;
+import com.example.teodora.employeetaskmanager.Fragments.AssignedTasksFragment;
+import com.example.teodora.employeetaskmanager.Models.ContactModel;
+import com.example.teodora.employeetaskmanager.Other.LocalDatabase;
 import com.example.teodora.employeetaskmanager.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 public class AssignTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -28,26 +58,58 @@ public class AssignTaskActivity extends AppCompatActivity implements DatePickerD
     private Toolbar toolbar;
 
     private String taskAssignee;
-    private String taskName;
-    private String taskProject;
-    private String taskDueDate;
-    private String taskPriority;
-    private String taskDescription;
-    private String taskAddress;
+//    private String taskName;
+//    private String taskProject;
+//    private String taskDueDate;
+//    private String taskPriority;
+//    private String taskDescription;
+//    private String taskAddress;
+
+    private String colorPriority = "#e2e619";
 
     private String taskAssigneeUid;
+
+    private ProgressDialog mProgress;
+
+    private FirebaseAuth mFirebaseAuth;;
+    private DatabaseReference mDatabaseTasks;
+    private DatabaseReference mDatabaseUsers;
+
+    private LocalDatabase localDatabase;
+
+
+
 
     //Date Picker
     Calendar calendar ;
     DatePickerDialog datePickerDialog ;
     int Year, Month, Day ;
     private TextView dateTextView, priorityTextView, descriptionTextView, locationTextView ;
+    private EditText assigneeEditText, taskEditText, projectEditText;
     private LinearLayout dueDateLayout, priorityLayout, descriptionLayout, locationLayout;
+
+    //Autocomplete Text
+    AutoCompleteTextView txtSearch;
+    ContactsAdapter contactsAdapter;
+    private String txtSearchTAG = "FALSE";
+    private ContactModel contactModelAssignee;
+
+
+    private FloatingActionButton fab;
 
     //Dialog Priority
     final CharSequence myList[] = { "High", "Medium", "Low" };
     private int i;
     private String txtDescription;
+    private String txtLocation;
+    private String AssignedByName;
+    private String AssigneeId;
+    private DatabaseReference newPost;
+
+    private List<ContactModel> contactsList = new ArrayList<>();
+
+
+
 
 //    RelativeLayout rl;
 
@@ -64,6 +126,46 @@ public class AssignTaskActivity extends AppCompatActivity implements DatePickerD
         toolbar.setTitle("Assign task");
         setSupportActionBar(toolbar);
 
+        // Initialize Firebase
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mDatabaseTasks = FirebaseDatabase.getInstance().getReference().child("Tasks");
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+
+        newPost = mDatabaseTasks.push();
+
+        localDatabase = new LocalDatabase(getApplicationContext());
+        contactsList = localDatabase.getAllContacts();
+
+        //Autocomplete
+        txtSearch = (AutoCompleteTextView) findViewById(R.id.etAsigneeName);
+        txtSearch.setThreshold(1);
+        contactsAdapter = new ContactsAdapter(this, R.layout.activity_assign_task, R.id.assignee_name, contactsList);
+        txtSearch.setAdapter(contactsAdapter);
+
+        txtSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                contactModelAssignee = (ContactModel) parent.getItemAtPosition(position);
+                if (contactModelAssignee != null) {
+
+                    txtSearchTAG = "TRUE";
+                    taskAssignee = contactModelAssignee.getName();
+//                    taskAssigneeUid = contactModelAssignee.getMobilePhone();
+
+                }
+                else {
+
+                    txtSearchTAG = "FALSE";
+
+                }
+
+
+            }
+        });
+
+
+
         //Date Picker
         calendar = Calendar.getInstance();
         Year = calendar.get(Calendar.YEAR);
@@ -79,6 +181,12 @@ public class AssignTaskActivity extends AppCompatActivity implements DatePickerD
         priorityLayout = (LinearLayout) findViewById(R.id.priorityLayout);
         descriptionLayout = (LinearLayout) findViewById(R.id.descriptionLayout);
         locationLayout = (LinearLayout) findViewById(R.id.locationLayout);
+
+        assigneeEditText = (EditText) findViewById(R.id.etAsigneeName);
+        taskEditText = (EditText) findViewById(R.id.etTaskName);
+        projectEditText = (EditText) findViewById(R.id.etProjectName);
+
+        mProgress = new ProgressDialog(AssignTaskActivity.this);
 
 
         dueDateLayout.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +218,18 @@ public class AssignTaskActivity extends AppCompatActivity implements DatePickerD
             @Override
             public void onClick(View v) {
                 showLocationDialog();
+            }
+        });
+
+        // Floating Action Button Click Listener
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        fab.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                addToFirebase();
             }
         });
 
@@ -281,11 +401,11 @@ public class AssignTaskActivity extends AppCompatActivity implements DatePickerD
                 };
                 editLocation.addTextChangedListener(inputTextWatcher);
 
-                txtDescription = editLocation.getText().toString();
-                if (txtDescription.length() <= textInputLayout.getCounterMaxLength())
+                txtLocation = editLocation.getText().toString();
+                if (txtLocation.length() <= textInputLayout.getCounterMaxLength())
                 {
 
-                    descriptionTextView.setText(txtDescription);
+                    locationTextView.setText(txtLocation);
                     wantToCloseDialog = true;
 
                 }
@@ -298,8 +418,134 @@ public class AssignTaskActivity extends AppCompatActivity implements DatePickerD
             }
         });
 
+    }
+
+
+
+    public void addToFirebase()
+    {
+        final String Assignee = assigneeEditText.getText().toString().trim();
+        final String Task = taskEditText.getText().toString().trim();
+        final String Project = projectEditText.getText().toString().trim();
+        final String DueDate = dateTextView.getText().toString().trim();
+        final String Priority = priorityTextView.getText().toString().trim();
+        final String Description = descriptionTextView.getText().toString().trim();
+        final String Location = locationTextView.getText().toString().trim();
+
+
+        if (Priority.equals("High")) colorPriority =  "#e91e63";
+        else if  (Priority.equals("Medium")) colorPriority =  "#66bb6a";
+        else if  (Priority.equals("Low")) colorPriority =  "#e2e619";
+
+        final String currentUserId = mFirebaseAuth.getCurrentUser().getUid();
+
+
+        final FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (Assignee.isEmpty() || Task.isEmpty() || Project.isEmpty()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(AssignTaskActivity.this);
+            builder.setMessage(R.string.assign_task_error_message)
+                    .setTitle(R.string.signup_error_title)
+                    .setPositiveButton(android.R.string.ok, null);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else if (checkInternetConnection()) {
+
+
+
+        final DatabaseReference currentUserName = mDatabaseUsers.child(mCurrentUser.getUid()).child("Name");
+        currentUserName.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.v("dataSnapshot", ":" + dataSnapshot);
+                AssignedByName = dataSnapshot.getValue(String.class);
+                Log.v("AssignedByName", ":" + AssignedByName);
+                newPost.child("taskAssignedBy").setValue(AssignedByName);
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        final Query getContactsQuery = mDatabaseUsers.orderByChild("Name").equalTo(Assignee);
+        getContactsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.v("dataSnapshot", ":" + dataSnapshot);
+                Map<String, Object> map = (HashMap<String, Object>) dataSnapshot.getValue();
+                String[] keys = new String[map.size()];
+                Object[] values = new Object[map.size()];
+
+
+
+                if (map != null) {
+
+                    int index = 0;
+                    for (Map.Entry<String, Object> mapEntry : map.entrySet()) {
+                        keys[index] = mapEntry.getKey();
+                        Log.v("E_VALUE", "MAP:" + keys[index]);
+                        values[index] = mapEntry.getValue();
+                        Log.v("E_VALUE", "values[index]:" + values[index]);
+                        index++;
+                    }
+                }
+                AssigneeId = keys[0];
+
+
+                newPost.child("taskAssigneeId").setValue(AssigneeId);
+
+
+                Log.v("AssigneeId", ":" + AssigneeId);
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+            mProgress.setMessage("Adding data to Firebase... ");
+            mProgress.show();
+
+//            DatabaseReference newPost = mDatabaseTasks.push();
+
+//            newPost.child("taskAssignedBy").setValue(AssignedByName);
+            newPost.child("taskAssignedById").setValue(currentUserId);
+            newPost.child("taskAssignee").setValue(taskAssignee);
+//            newPost.child("taskAssigneeId").setValue(AssigneeId);
+            newPost.child("taskDescription").setValue(Description);
+            newPost.child("taskDueDate").setValue(DueDate);
+            newPost.child("taskLocation").setValue(Location);
+            newPost.child("taskName").setValue(Task);
+            newPost.child("taskPercentage").setValue("0");
+            newPost.child("taskPriority").setValue(colorPriority);
+            newPost.child("taskProject").setValue(Project);
+
+
+            // Inserting To Local Database
+//            Log.d("Inserting new team: ", "Inserting ..");
+//            db.addTeam(new TeamModel(teamName,"0"));
+
+            mProgress.dismiss();
+            Intent intent = new Intent (AssignTaskActivity.this, MainActivity.class);
+//                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
+        }
 
     }
+
+    public boolean checkInternetConnection() {
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
+        return (activeNetworkInfo != null && activeNetworkInfo.isAvailable() && activeNetworkInfo.isConnected());
+    }
+
 
 
 

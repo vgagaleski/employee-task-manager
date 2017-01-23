@@ -1,5 +1,6 @@
 package com.example.teodora.employeetaskmanager.Adapters;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.teodora.employeetaskmanager.Activities.MainActivity;
+import com.example.teodora.employeetaskmanager.Fragments.MyTasksFragment;
 import com.example.teodora.employeetaskmanager.Models.TaskModel;
 import com.example.teodora.employeetaskmanager.R;
 import com.github.lzyzsd.circleprogress.DonutProgress;
@@ -21,6 +23,7 @@ import java.util.List;
 public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecyclerViewAdapter.MyViewHolder> {
 
     private List<TaskModel> taskModelList;
+    private static final String TAG = TasksRecyclerViewAdapter.class.getSimpleName();
 
 
 
@@ -34,7 +37,9 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
 
         public MyViewHolder(View view) {
             super(view);
-            Log.d("Inserting new team: ", "Inserting ..");
+            Log.d("MyViewHolder: ", "TasksRecyclerViewAdapter");
+
+//            Toast.makeText(, "MyViewHolder:", Toast.LENGTH_SHORT).show();
             taskPriority = (LinearLayout) view.findViewById(R.id.taskPriority);
             taskName = (TextView) view.findViewById(R.id.taskName);
             taskDueDate = (TextView) view.findViewById(R.id.taskDueDate);
@@ -48,18 +53,22 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TasksRecyclerViewAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.task_row_layout, parent, false);
 
-        return new MyViewHolder(itemView);
+        return new TasksRecyclerViewAdapter.MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        Log.d("Inserting new team1: ", "Inserting ..");
+
         TaskModel taskModel = taskModelList.get(position);
+        Log.d("onBindViewHolder: ",  "" + taskModel.getTaskDescription());
+        Log.d("ova e Size na listata: ",  "" + taskModelList.size());
+        Log.d("Ova e position: ",  "" + position);
+
         holder.taskPriority.setBackgroundColor(Color.parseColor(taskModel.getTaskPriority()));
         holder.taskName.setText(taskModel.getTaskName());
         holder.taskDueDate.setText(taskModel.getTaskDueDate());

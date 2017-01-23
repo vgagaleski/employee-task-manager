@@ -12,10 +12,10 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task_details);
+        setContentView(R.layout.activity_add_contact);
         // Adding Toolbar to AssignTask screen
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Privacy Policy");
-        setSupportActionBar(toolbar);
+        //toolbar.setTitle("Privacy Policy");
+//        setSupportActionBar(toolbar);
     }
 }

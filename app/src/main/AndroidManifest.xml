@@ -31,7 +31,8 @@
         <activity android:name=".Activities.AssignTaskActivity" />
         <activity android:name=".Activities.MainActivity" />
         <activity android:name=".Activities.RegisterActivity" />
-        <activity android:name=".Activities.TaskDetailsActivity"></activity>
+        <activity android:name=".Activities.TaskDetailsActivity" />
+        <activity android:name=".Activities.AddContactActivity"></activity>
     </application>
 
 </manifest>

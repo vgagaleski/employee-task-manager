@@ -34,7 +34,20 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <EditText
+                <!--<EditText-->
+                    <!--android:id="@+id/etAsigneeName"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="45dp"-->
+                    <!--android:layout_marginStart="45dp"-->
+                    <!--android:layout_marginRight="45dp"-->
+                    <!--android:layout_marginEnd="45dp"-->
+                    <!--android:inputType="text"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:textSize="@dimen/small_txt_size"-->
+                    <!--android:hint="@string/asignee_name"/>-->
+
+                <AutoCompleteTextView
                     android:id="@+id/etAsigneeName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -45,7 +58,9 @@
                     android:inputType="text"
                     android:textColor="@color/white"
                     android:textSize="@dimen/small_txt_size"
-                    android:hint="@string/asignee_name"/>
+                    android:hint="@string/asignee_name"
+                    android:completionThreshold="1"/>
+
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout

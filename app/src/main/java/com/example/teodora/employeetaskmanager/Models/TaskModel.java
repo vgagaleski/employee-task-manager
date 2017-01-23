@@ -2,9 +2,6 @@ package com.example.teodora.employeetaskmanager.Models;
 
 import java.io.Serializable;
 
-/**
- * Created by viktor on 18.1.17.
- */
 
 public class TaskModel implements Serializable{
 

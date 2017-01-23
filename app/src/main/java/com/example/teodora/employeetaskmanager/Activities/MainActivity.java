@@ -26,15 +26,18 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.teodora.employeetaskmanager.Adapters.MyPagerAdapter;
 import com.example.teodora.employeetaskmanager.Fragments.AssignedTasksFragment;
 import com.example.teodora.employeetaskmanager.Fragments.ContactsFragment;
 import com.example.teodora.employeetaskmanager.Fragments.MyTasksFragment;
 import com.example.teodora.employeetaskmanager.Other.CircleTransform;
+import com.example.teodora.employeetaskmanager.Other.FragmentLifecycle;
 import com.example.teodora.employeetaskmanager.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,7 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
     // This is for the tabs
     private TabLayout tabLayout;
-    private ViewPager viewPager;
+    private ViewPager pager;
+
+//    private ViewPagerAdapter adapter;
+    private MyPagerAdapter pageAdapter;
 
 
     // urls to load navigation header background image
@@ -79,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         // Adding Toolbar to Main screen
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Task Manager"); // Od Viktor
@@ -87,11 +95,26 @@ public class MainActivity extends AppCompatActivity {
         //Tabs
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+        pageAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        pageAdapter.addFragment(new MyTasksFragment(), "MY TASKS");
+        pageAdapter.addFragment(new AssignedTasksFragment(), "TASKS");
+        pageAdapter.addFragment(new ContactsFragment(), "CONTACTS");
+        pager = (ViewPager)findViewById(R.id.viewpager);
+        pager.setAdapter(pageAdapter);
+        pager.addOnPageChangeListener(pageChangeListener);
+
+//        pager.getCurrentItem();
+
+//        FragmentLifecycle fragmentToShow = (FragmentLifecycle)pageAdapter.getItem(pager.getCurrentItem());
+//        fragmentToShow.onResumeFragment();
+
+
+
+
+
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(pager);
         // End tabs
 
         mHandler = new Handler();
@@ -135,44 +158,75 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    //Tabs
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new MyTasksFragment(), "MY TASKS");
-        adapter.addFragment(new AssignedTasksFragment(), "TASKS");
-        adapter.addFragment(new ContactsFragment(), "CONTACTS");
-        viewPager.setAdapter(adapter);
-    }
 
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+//    //Tabs
+//    private void setupViewPager(ViewPager viewPager) {
+//        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+//        adapter.addFragment(new MyTasksFragment(), "MY TASKS");
+//        adapter.addFragment(new AssignedTasksFragment(), "TASKS");
+//        adapter.addFragment(new ContactsFragment(), "CONTACTS");
+//        viewPager.setAdapter(adapter);
+//
+//    }
 
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
+
+    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        int currentPosition = 0;
+
+        @Override
+        public void onPageSelected(int newPosition) {
+
+            FragmentLifecycle fragmentToHide = (FragmentLifecycle)pageAdapter.getItem(currentPosition);
+            fragmentToHide.onPauseFragment();
+
+            FragmentLifecycle fragmentToShow = (FragmentLifecycle)pageAdapter.getItem(newPosition);
+            fragmentToShow.onResumeFragment();
+
+            currentPosition = newPosition;
         }
 
         @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
+        public void onPageScrolled(int arg0, float arg1, int arg2) { }
 
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
+        public void onPageScrollStateChanged(int arg0) { }
+    };
 
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }
+
+
+
+
+
+//    class ViewPagerAdapter extends FragmentPagerAdapter {
+//        private final List<Fragment> mFragmentList = new ArrayList<>();
+//        private final List<String> mFragmentTitleList = new ArrayList<>();
+//
+//        public ViewPagerAdapter(FragmentManager manager) {
+//            super(manager);
+//        }
+//
+//        @Override
+//        public Fragment getItem(int position) {
+//            return mFragmentList.get(position);
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return mFragmentList.size();
+//        }
+//
+//        public void addFragment(Fragment fragment, String title) {
+//            mFragmentList.add(fragment);
+//            mFragmentTitleList.add(title);
+//        }
+//
+//        @Override
+//        public CharSequence getPageTitle(int position) {
+//            return mFragmentTitleList.get(position);
+//        }
+//    }
 
     /***
      * Load navigation menu header information

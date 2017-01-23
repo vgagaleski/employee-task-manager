@@ -29,7 +29,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         String color = taskModel.getTaskPriority();
         if (color.equals("#e91e63"))priority="High";
         else if (color.equals("#66bb6a")) priority="Medium";
-        else if (color.equals("#b0bec5")) priority="Low";
+        else if (color.equals("#e2e619")) priority="Low";
 
 
         textView1 = (TextView) findViewById(R.id.txt_assignee);
@@ -40,10 +40,10 @@ public class TaskDetailsActivity extends AppCompatActivity {
         textView6 = (TextView) findViewById(R.id.txt_description);
         textView7 = (TextView) findViewById(R.id.txt_location);
 
-        textView1.setText(" " + taskModel.getTaskAssignee() + "blablerogjoaeijro iejroaiegj eorjg ");
-        textView2.setText(" " + taskModel.getTaskAssignedBy() + "blablerogjoaeijro iejroaiegj eorjg ");
+        textView1.setText(" " + taskModel.getTaskAssignee());
+        textView2.setText(" " + taskModel.getTaskAssignedBy());
         textView3.setText(" " + taskModel.getTaskDueDate());
-        textView4.setText(" " + taskModel.getTaskProject()+ "blablerogjoaeijro");
+        textView4.setText(" " + taskModel.getTaskProject());
         textView5.setText(priority);
         textView6.setText(taskModel.getTaskDescription());
         textView7.setText(taskModel.getTaskLocation());
