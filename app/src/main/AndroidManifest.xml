@@ -7,6 +7,10 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
@@ -32,7 +36,25 @@
         <activity android:name=".Activities.MainActivity" />
         <activity android:name=".Activities.RegisterActivity" />
         <activity android:name=".Activities.TaskDetailsActivity" />
-        <activity android:name=".Activities.AddContactActivity"></activity>
+        <activity android:name=".Activities.AddContactActivity" />
+        <activity android:name=".Activities.LocationActivity"></activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+
+        <!--Google Places-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA7sv1vMohz79PWGD6BSv0eTKfHypZEm2Q"/>
+
+        <!--Google Maps-->
+
+        <!--<meta-data-->
+        <!--android:name="com.google.android.geo.API_KEY"-->
+        <!--android:value="AIzaSyBcbjbwqVNFI4Z5AH84PSt6wc1-wMIremE"/>-->
+
     </application>
 
 </manifest>

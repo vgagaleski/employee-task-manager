@@ -1,6 +1,7 @@
 package com.example.teodora.employeetaskmanager.Activities;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -107,6 +108,8 @@ public class AssignTaskActivity extends AppCompatActivity implements DatePickerD
     private DatabaseReference newPost;
 
     private List<ContactModel> contactsList = new ArrayList<>();
+
+    private String address;
 
 
 
@@ -217,7 +220,9 @@ public class AssignTaskActivity extends AppCompatActivity implements DatePickerD
         locationLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLocationDialog();
+//                showLocationDialog();
+                Intent intent = new Intent(getApplicationContext(), LocationActivity.class);
+                startActivityForResult(intent,1);
             }
         });
 
@@ -233,6 +238,21 @@ public class AssignTaskActivity extends AppCompatActivity implements DatePickerD
             }
         });
 
+
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                address = data.getStringExtra("address");
+                locationTextView.setText(address);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) { }
+        }
     }
 
     @Override
