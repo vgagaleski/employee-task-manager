@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.teodora.employeetaskmanager.Activities.TaskDetailsActivity;
+import com.example.teodora.employeetaskmanager.Adapters.ProjectsAdapter;
 import com.example.teodora.employeetaskmanager.Adapters.TasksRecyclerViewAdapter;
 import com.example.teodora.employeetaskmanager.Models.TaskModel;
 import com.example.teodora.employeetaskmanager.Other.FragmentLifecycle;
@@ -42,7 +43,7 @@ public class SeventhDayFragment extends Fragment implements SwipeRefreshLayout.O
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ArrayList<TaskModel> tasksList = new ArrayList<>();
-    private TasksRecyclerViewAdapter tasksRecyclerViewAdapter;
+    private ProjectsAdapter projectsAdapter;
 
 
     private DatabaseReference mDatabaseTasks;
@@ -180,10 +181,10 @@ public class SeventhDayFragment extends Fragment implements SwipeRefreshLayout.O
 
 
                     }
-                    tasksRecyclerViewAdapter = new TasksRecyclerViewAdapter(tasksList);
+                    projectsAdapter = new ProjectsAdapter(tasksList);
                     swipeRefreshLayout.setRefreshing(false);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                    recyclerView.setAdapter(tasksRecyclerViewAdapter);
+                    recyclerView.setAdapter(projectsAdapter);
 
 
                 }

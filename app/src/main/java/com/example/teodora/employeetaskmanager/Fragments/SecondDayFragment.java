@@ -172,7 +172,7 @@ public class SecondDayFragment extends Fragment implements SwipeRefreshLayout.On
                         Log.e("tasksSnapshot " ,"" + tasksSnapshot);
 
                         TaskModel taskModel = tasksSnapshot.getValue(TaskModel.class);
-                        if (taskModel.getTaskAssigneeId().equals(currentUserNameId))
+
                         tasksList.add(taskModel);
                         Log.v("Added to tasksList: ", "tasksAssignee " + taskModel.getTaskDescription());
                         Log.v("Ova e tasksList: ", " " + tasksList);

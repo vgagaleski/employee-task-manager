@@ -33,6 +33,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyTasksFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, FragmentLifecycle {
 
@@ -41,6 +42,7 @@ public class MyTasksFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ArrayList<TaskModel> tasksList = new ArrayList<>();
+    private List<String> taskIDs = new ArrayList<>();
     private TasksRecyclerViewAdapter tasksRecyclerViewAdapter;
 
 
@@ -125,6 +127,7 @@ public class MyTasksFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                 Intent taskDetailsIntent = new Intent(getContext(),TaskDetailsActivity.class);
                 taskDetailsIntent.putExtra("taskDetails",tasksList.get(position));
+                taskDetailsIntent.putExtra("taskID", taskIDs.get(position));
                 startActivity(taskDetailsIntent);
 //                Toast.makeText(getContext(), tasksList.get(position).getTaskAssigneeId() + " is selected!", Toast.LENGTH_SHORT).show();
             }
@@ -180,7 +183,9 @@ public class MyTasksFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         Log.e("tasksSnapshot " ,"" + tasksSnapshot);
 
                         TaskModel taskModel = tasksSnapshot.getValue(TaskModel.class);
+                        String taskID = tasksSnapshot.getKey();
                         tasksList.add(taskModel);
+                        taskIDs.add(taskID);
                         Log.v("Added to tasksList: ", "tasksAssignee " + taskModel.getTaskDescription());
                         Log.v("Ova e tasksList: ", " " + tasksList);
 

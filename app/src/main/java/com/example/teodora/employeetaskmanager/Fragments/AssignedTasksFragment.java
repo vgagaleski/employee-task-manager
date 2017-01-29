@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.example.teodora.employeetaskmanager.Activities.AddContactActivity;
 import com.example.teodora.employeetaskmanager.Activities.AssignTaskActivity;
 import com.example.teodora.employeetaskmanager.Activities.TaskDetailsActivity;
+import com.example.teodora.employeetaskmanager.Activities.TaskDetailsActivity2;
 import com.example.teodora.employeetaskmanager.Adapters.TasksRecyclerViewAdapter;
 import com.example.teodora.employeetaskmanager.Models.TaskModel;
 import com.example.teodora.employeetaskmanager.Other.FragmentLifecycle;
@@ -119,7 +120,7 @@ public class AssignedTasksFragment extends Fragment implements SwipeRefreshLayou
             public void onClick(View view, int position) {
 
 
-                Intent taskDetailsIntent = new Intent(getContext(), TaskDetailsActivity.class);
+                Intent taskDetailsIntent = new Intent(getContext(), TaskDetailsActivity2.class);
                 taskDetailsIntent.putExtra("taskDetails", tasksList.get(position));
                 startActivity(taskDetailsIntent);
 //                Toast.makeText(getContext(), tasksList.get(position).getTaskAssigneeId() + " is selected!", Toast.LENGTH_SHORT).show();

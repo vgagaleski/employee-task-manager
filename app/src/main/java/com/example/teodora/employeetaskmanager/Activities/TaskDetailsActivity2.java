@@ -1,14 +1,13 @@
 package com.example.teodora.employeetaskmanager.Activities;
 
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.teodora.employeetaskmanager.Models.TaskModel;
@@ -18,7 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
-public class TaskDetailsActivity extends AppCompatActivity {
+public class TaskDetailsActivity2 extends AppCompatActivity {
 
     private Toolbar toolbar;
     private TextView textView1, textView2, textView3, textView4, textView5, textView6, textView7, textView8, lblProgress;
@@ -42,7 +41,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         TaskModel taskModel = (TaskModel)getIntent().getSerializableExtra("taskDetails");
-        taskID = (String) getIntent().getStringExtra("taskID");
+//        taskID = (String) getIntent().getStringExtra("taskID");
 
         databaseTasks = FirebaseDatabase.getInstance().getReference("Tasks");
 
@@ -83,7 +82,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         statusLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showStatusDialog();
+//                showStatusDialog();
             }
         });
 

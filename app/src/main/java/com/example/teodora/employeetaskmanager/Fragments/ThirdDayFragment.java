@@ -176,7 +176,7 @@ public class ThirdDayFragment extends Fragment implements SwipeRefreshLayout.OnR
                         if (taskModel.getTaskAssigneeId().equals(currentUserNameId))
                         tasksList.add(taskModel);
                         Log.v("Added to tasksList: ", "tasksAssignee " + taskModel.getTaskDescription());
-                        Log.v("Ova e tasksList: ", " " + tasksList);
+//                        Log.v("Ova e tasksList: ", " " + tasksList);
 
 
 

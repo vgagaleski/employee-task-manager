@@ -46,6 +46,7 @@ dependencies {
     compile 'com.firebaseui:firebase-ui-storage:0.6.0'
 
     compile 'com.google.android.gms:play-services-places:10.0.1'
+    compile 'org.adw.library:discrete-seekbar:1.0.1'
     testCompile 'junit:junit:4.12'
 }
 

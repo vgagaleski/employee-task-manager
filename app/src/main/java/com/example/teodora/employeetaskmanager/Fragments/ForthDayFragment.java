@@ -65,7 +65,7 @@ public class ForthDayFragment extends Fragment implements SwipeRefreshLayout.OnR
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy"); // Set your date format
 
-        calendar.add(Calendar.DAY_OF_YEAR, 3);
+        calendar.add(Calendar.DAY_OF_YEAR, 2);
         Date d = calendar.getTime();
         currentDate = sdf.format(d);
 
@@ -84,7 +84,7 @@ public class ForthDayFragment extends Fragment implements SwipeRefreshLayout.OnR
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_forth_day, container, false);
+        View view = inflater.inflate(R.layout.fragment_third_day, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -172,7 +172,6 @@ public class ForthDayFragment extends Fragment implements SwipeRefreshLayout.OnR
                         Log.e("tasksSnapshot " ,"" + tasksSnapshot);
 
                         TaskModel taskModel = tasksSnapshot.getValue(TaskModel.class);
-                        if (taskModel.getTaskAssigneeId().equals(currentUserNameId))
                         tasksList.add(taskModel);
                         Log.v("Added to tasksList: ", "tasksAssignee " + taskModel.getTaskDescription());
                         Log.v("Ova e tasksList: ", " " + tasksList);
