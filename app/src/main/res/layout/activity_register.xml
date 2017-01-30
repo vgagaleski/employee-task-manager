@@ -4,13 +4,12 @@
     android:id="@+id/activity_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:focusableInTouchMode="true"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.teodora.employeetaskmanager.Activities.RegisterActivity">
-
 
     <!-- Login progress -->
     <ProgressBar
@@ -26,32 +25,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <LinearLayout
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/register_form_txt"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:textSize="@dimen/large_txt_size"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimaryDark"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                />
+                android:text="@string/register_form_txt"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/large_txt_size"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/iv_logo_image"
                 android:layout_width="@dimen/logo_image_size"
                 android:layout_height="@dimen/logo_image_size"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:src="@drawable/task_manager2"
-                android:layout_gravity="center_horizontal"/>
+                android:src="@drawable/task_manager2" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -62,10 +60,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_user"
-                    android:textColor="@color/primaryText"
-                    android:textColorHint="@color/secondaryText"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textColor="@color/primaryText"
+                    android:textColorHint="@color/secondaryText" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -79,9 +77,9 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
+                    android:maxLines="1"
                     android:textColor="@color/primaryText"
-                    android:textColorHint="@color/secondaryText"
-                    android:maxLines="1" />
+                    android:textColorHint="@color/secondaryText" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -98,10 +96,10 @@
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
-                    android:textColor="@color/primaryText"
-                    android:textColorHint="@color/secondaryText"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textColor="@color/primaryText"
+                    android:textColorHint="@color/secondaryText" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -114,9 +112,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_address"
+                    android:maxLines="1"
                     android:textColor="@color/primaryText"
-                    android:textColorHint="@color/secondaryText"
-                    android:maxLines="1" />
+                    android:textColorHint="@color/secondaryText" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -129,9 +127,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_mobile_phone"
+                    android:maxLines="1"
                     android:textColor="@color/primaryText"
-                    android:textColorHint="@color/secondaryText"
-                    android:maxLines="1" />
+                    android:textColorHint="@color/secondaryText" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -141,10 +139,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="2dp"
-                android:layout_marginStart="2dp"
                 android:layout_marginEnd="2dp"
+                android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
+                android:layout_marginStart="2dp"
                 android:layout_marginTop="10dp"
 
                 android:background="@drawable/buttonshape"
@@ -156,6 +154,4 @@
 
         </LinearLayout>
     </ScrollView>
-
-
 </RelativeLayout>

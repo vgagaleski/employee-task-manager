@@ -5,13 +5,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.teodora.employeetaskmanager.Fragments.MyTasksFragment">
 
-
-
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/contactsRecyclerView"
@@ -20,7 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     </android.support.v4.widget.SwipeRefreshLayout>
-
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

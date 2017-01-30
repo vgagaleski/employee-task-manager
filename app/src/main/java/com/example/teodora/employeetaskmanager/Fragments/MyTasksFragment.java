@@ -23,7 +23,6 @@ import com.example.teodora.employeetaskmanager.Models.TaskModel;
 import com.example.teodora.employeetaskmanager.Other.FragmentLifecycle;
 import com.example.teodora.employeetaskmanager.Other.RecyclerTouchListener;
 import com.example.teodora.employeetaskmanager.R;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,69 +30,40 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyTasksFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, FragmentLifecycle {
 
     private static final String TAG = MyTasksFragment.class.getSimpleName();
-
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ArrayList<TaskModel> tasksList = new ArrayList<>();
     private List<String> taskIDs = new ArrayList<>();
     private TasksRecyclerViewAdapter tasksRecyclerViewAdapter;
-
-
     private DatabaseReference mDatabaseTasks;
     private FirebaseAuth mAuth;
     private boolean isFirstTime = true;
-
     private String currentUserNameId;
-
     public MyTasksFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "onCreate()");
-//        Toast.makeText(getActivity(), "onCreate():" + TAG, Toast.LENGTH_SHORT).show();
         super.onCreate(savedInstanceState);
-//        Toast.makeText(getContext(),"Helllooooo", Toast.LENGTH_LONG).show();
         mAuth = FirebaseAuth.getInstance();
-
-
         //Search for the exact user that is logged in
         mDatabaseTasks= FirebaseDatabase.getInstance().getReference().child("Tasks");
         currentUserNameId = mAuth.getCurrentUser().getUid();
         mDatabaseTasks.keepSynced(true);
-
-
     }
-
-//    @Override
-//    public void onResume() {
-//         super.onResume();
-//         fetchData();
-//         Log.v("onResume in MyTasks", "" + "");
-//
-//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_tasks, container, false);
-        Log.i(TAG, "onCreateView()");
-//        Toast.makeText(getActivity(), "onCreateView():" + TAG, Toast.LENGTH_SHORT).show();
-
-//        if (view.getVisibility() == View.VISIBLE) {
-//            Toast.makeText(getContext(),"Helllooooo", Toast.LENGTH_LONG).show();
-//        } else {
-//            Toast.makeText(getContext(),"Goodbye", Toast.LENGTH_LONG).show();
-//        }
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -102,11 +72,8 @@ public class MyTasksFragment extends Fragment implements SwipeRefreshLayout.OnRe
         recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-
-
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
-
 
         swipeRefreshLayout.post(new Runnable() {
                                     @Override
@@ -116,20 +83,13 @@ public class MyTasksFragment extends Fragment implements SwipeRefreshLayout.OnRe
                                     }
                                 }
         );
-
-
-
-
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-
-
                 Intent taskDetailsIntent = new Intent(getContext(),TaskDetailsActivity.class);
                 taskDetailsIntent.putExtra("taskDetails",tasksList.get(position));
                 taskDetailsIntent.putExtra("taskID", taskIDs.get(position));
                 startActivity(taskDetailsIntent);
-//                Toast.makeText(getContext(), tasksList.get(position).getTaskAssigneeId() + " is selected!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -139,8 +99,6 @@ public class MyTasksFragment extends Fragment implements SwipeRefreshLayout.OnRe
         }));
 
         fetchData();
-
-
         return view;
     }
 
@@ -152,67 +110,41 @@ public class MyTasksFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public void onPauseFragment() {
         Log.i(TAG, "onPauseFragment()");
-//        Toast.makeText(getActivity(), "onPauseFragment():" + TAG, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onResumeFragment() {
         Log.i(TAG, "onResumeFragment()");
-//        Toast.makeText(getActivity(), "onResumeFragment():" + TAG, Toast.LENGTH_SHORT).show();
         fetchData();
     }
 
     private void fetchData() {
         isFirstTime = false;
-
-//        Toast.makeText(getContext(), "vo fetch data", Toast.LENGTH_LONG).show();
         if (checkInternetConnection()){
-
             Query getTasksQuery = mDatabaseTasks.orderByChild("taskAssigneeId").equalTo(currentUserNameId);
-
             getTasksQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
                     tasksList.clear();
                     int childrenCount = (int) dataSnapshot.getChildrenCount();
-                    Log.e("DatabaseCount " ,"" + dataSnapshot.getChildrenCount());
-                    Log.e("dataSnapshot " ,"" + dataSnapshot);
-
                     for (DataSnapshot tasksSnapshot : dataSnapshot.getChildren()){
-                        Log.e("tasksSnapshot " ,"" + tasksSnapshot);
-
                         TaskModel taskModel = tasksSnapshot.getValue(TaskModel.class);
                         String taskID = tasksSnapshot.getKey();
                         tasksList.add(taskModel);
                         taskIDs.add(taskID);
-                        Log.v("Added to tasksList: ", "tasksAssignee " + taskModel.getTaskDescription());
-                        Log.v("Ova e tasksList: ", " " + tasksList);
-
-
-
                     }
                     tasksRecyclerViewAdapter = new TasksRecyclerViewAdapter(tasksList);
                     swipeRefreshLayout.setRefreshing(false);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                     recyclerView.setAdapter(tasksRecyclerViewAdapter);
-
-
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
                     Log.e("Database Error: " ,"No databaseSnapshot caused by" + databaseError);
                     swipeRefreshLayout.setRefreshing(false);
-
                 }
             });
-
-//            tasksRecyclerViewAdapter = new TasksRecyclerViewAdapter(tasksList);
-//            swipeRefreshLayout.setRefreshing(false);
-//            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//            recyclerView.setAdapter(tasksRecyclerViewAdapter);
 
         }
         else
@@ -220,12 +152,9 @@ public class MyTasksFragment extends Fragment implements SwipeRefreshLayout.OnRe
         swipeRefreshLayout.setRefreshing(false);
     }
 
-
-
     public boolean checkInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
         return (activeNetworkInfo != null && activeNetworkInfo.isAvailable() && activeNetworkInfo.isConnected());
     }
-
 }

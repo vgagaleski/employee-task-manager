@@ -8,14 +8,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.TextView;
-
-import java.lang.reflect.Array;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Calendar;
 
 import com.example.teodora.employeetaskmanager.Fragments.FifthDayFragment;
 import com.example.teodora.employeetaskmanager.Fragments.FirstDayFragment;
@@ -26,45 +18,42 @@ import com.example.teodora.employeetaskmanager.Fragments.SixthDayFragment;
 import com.example.teodora.employeetaskmanager.Fragments.ThirdDayFragment;
 import com.example.teodora.employeetaskmanager.R;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 public class NextDaysActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.activity_next_days);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Next 7 Days");
-        setSupportActionBar(toolbar);
 
         //Calendar
         Date d = Calendar.getInstance().getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("EEE dd"); // Set your date format
         String currentData = sdf.format(d); // Get Date String according to date format
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
-
-
     }
 
     private void setupViewPager(ViewPager viewPager) {
         //Calendar
         Calendar calendar = Calendar.getInstance();
         String[] array = new String[7];
-        // Set your date format
+        // Set date format
         SimpleDateFormat sdf = new SimpleDateFormat("EE dd");
         Date d = calendar.getTime();
         array[0] = sdf.format(d);

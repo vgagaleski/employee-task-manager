@@ -1,6 +1,5 @@
 package com.example.teodora.employeetaskmanager.Other;
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;

@@ -25,18 +25,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Map;
-
 public class LoginActivity extends AppCompatActivity {
 
     private EditText userEmail;
     private EditText userPassword;
     private Button loginBtn;
-
     private FirebaseAuth mFirebaseAuth;;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabaseUsers;
-
     private ProgressDialog mProgress;
 
     @Override
@@ -55,16 +51,12 @@ public class LoginActivity extends AppCompatActivity {
         mDatabaseUsers.keepSynced(true);
 
         mProgress = new ProgressDialog(this);
-
         mAuthListener = new FirebaseAuth.AuthStateListener(){
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
-
                 if(firebaseAuth.getCurrentUser() != null){
-
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
-
                 }
             }
         };
@@ -77,17 +69,14 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else
                     Toast.makeText(getApplicationContext(), "No internet connection!", Toast.LENGTH_LONG).show();
-
             }
         });
     }
-
 
     private void checkLogin(){
 
         final String email = userEmail.getText().toString().trim();
         final String password = userPassword.getText().toString().trim();
-
         if (email.isEmpty() || password.isEmpty()) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
@@ -96,7 +85,6 @@ public class LoginActivity extends AppCompatActivity {
                     .setPositiveButton(android.R.string.ok, null);
             AlertDialog dialog = builder.create();
             dialog.show();
-
         } else {
 
             mProgress.setMessage("Checking login... ");
@@ -107,44 +95,10 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-
-//                                 We should check if the email entered in SharedPref previously is the same with the email
-//                                 that is currently logging in
-//                                if (email.equals(pref.getString("KEY_EMAIL",null))){
-//
-//                                    mProgress.dismiss();
-//                                    checkUserExist();
-//
-//                                }
-//                                else {
-//
-//                                    editor.clear();
-//                                    editor.commit();
-//                                    // We should take all user elements from the Firebase Database and put them in editor (Shared Preferences)
-//                                    editor.putString("KEY_EMAIL", email);
-//                                    editor.commit();
                                     mProgress.dismiss();
                                     checkUserExist();
 
                                     final String user_id = mFirebaseAuth.getCurrentUser().getUid();
-
-//                                    mDatabaseUsers.child(user_id).addListenerForSingleValueEvent(new ValueEventListener() {
-//                                        @Override
-//                                        public void onDataChange(DataSnapshot dataSnapshot) {
-//                                            ContactModel contactModel = dataSnapshot.getValue(ContactModel.class);
-//                                            if (contactModel.getName().equals(null)){
-//                                                editor.putString("KEY_NAME", contactModel.getName());
-//                                                editor.putString("KEY_PHONE", contactModel.getPhone());
-//                                            }
-//
-//                                        }
-//                                        @Override
-//                                        public void onCancelled(DatabaseError databaseError) {
-//
-//                                        }
-//                                    });
-
-                               // }
                             } else {
                                 mProgress.dismiss();
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
@@ -157,40 +111,29 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
         }
-
     }
-
     private void checkUserExist(){
 
         final String user_id = mFirebaseAuth.getCurrentUser().getUid();
         mDatabaseUsers.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 if (dataSnapshot.hasChild(user_id)){
-
                     Intent mainIntent = new Intent (LoginActivity.this, MainActivity.class);
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(mainIntent);
                 }
                 else {
-
-                    // MyProfileActivity.class should be switched with EditProfileActivity for users that are logged in with
-                    // Google, Facebook.. FURTHER IMPLEMENTATION
                     Intent setupIntent = new Intent (LoginActivity.this, MyProfileActivity.class);
                     setupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(setupIntent);
                 }
-
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) { }
         });
     }
-
     //Sign Up
     public void onSignUpPressed(View view) {
         startActivity(new Intent(LoginActivity.this,RegisterActivity.class));

@@ -8,19 +8,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
-
 import com.example.teodora.employeetaskmanager.Models.ContactModel;
 import com.example.teodora.employeetaskmanager.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsAdapter extends ArrayAdapter<ContactModel> {
-
     Context context;
     int resource, textViewResourceId;
     List<ContactModel> items, tempItems, suggestions;
-
     public ContactsAdapter(Context context, int resource, int textViewResourceId, List<ContactModel> items) {
         super(context, resource, textViewResourceId, items);
         this.context = context;
@@ -40,7 +36,6 @@ public class ContactsAdapter extends ArrayAdapter<ContactModel> {
         }
         ContactModel contactModel = items.get(position);
         if (contactModel != null) {
-            //ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
             TextView textName = (TextView) view.findViewById(R.id.assignee_name);
             TextView textEmail = (TextView) view.findViewById(R.id.assignee_email);
             if ((textName != null) && (textEmail != null)){

@@ -1,10 +1,7 @@
 package com.example.teodora.employeetaskmanager.Models;
 
-
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-
-import java.util.HashMap;
 
 @IgnoreExtraProperties
 public class ContactModel {
@@ -32,10 +29,8 @@ public class ContactModel {
     }
 
 
-
     public ContactModel() {
     }
-
 
     public String getAddress() {
         return Address;

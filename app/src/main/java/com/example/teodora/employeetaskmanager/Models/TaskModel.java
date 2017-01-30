@@ -1,8 +1,6 @@
 package com.example.teodora.employeetaskmanager.Models;
 
 import java.io.Serializable;
-
-
 public class TaskModel implements Serializable{
 
     private String taskAssignedBy;
@@ -16,7 +14,6 @@ public class TaskModel implements Serializable{
     private String taskPercentage;
     private String taskPriority;
     private String taskProject;
-
     public TaskModel() {
     }
 

@@ -13,7 +13,7 @@ public class AboutUsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_us);
-        // Adding Toolbar to AssignTask screen
+        // Adding Toolbar to About Us screen
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("About us");
         setSupportActionBar(toolbar);

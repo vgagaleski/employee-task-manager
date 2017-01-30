@@ -17,9 +17,6 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-
-
-
     <!--Login-->
     <style name="LoginCreateText">
         <item name="android:textSize">@dimen/login_buttons_text_size</item>
@@ -35,11 +32,7 @@
         <item name="android:clickable">true</item>
     </style>
 
-
-
-
     <!--Alert Dialog -->
-
     <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <!--item RadioButton or CheckBox color-->
         <item name="colorControlNormal">@color/colorPrimaryDark</item>
@@ -54,7 +47,6 @@
         <!--dialog background-->
         <item name="android:windowBackground">@drawable/background_dialog</item>
     </style>
-
 
     <!--Text Counter in Dialog -->
     <!--Overflow label text style-->

@@ -10,7 +10,6 @@
     <dimen name="profile_width">75dp</dimen>
     <dimen name="profile_height">75dp</dimen>
 
-
     <!--Working with tabs-->
     <dimen name="tab_max_width">264dp</dimen>
     <dimen name="tab_padding_bottom">16dp</dimen>
@@ -22,7 +21,6 @@
     <dimen name="card_margin">10dp</dimen>
     <dimen name="card_radius">5dp</dimen>
     <dimen name="very_small_txt_size">12dp</dimen>
-
 
     <!--Text dimensions-->
     <dimen name="large_txt_size">30sp</dimen>

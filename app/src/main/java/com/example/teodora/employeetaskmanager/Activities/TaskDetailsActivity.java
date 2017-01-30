@@ -1,21 +1,19 @@
 package com.example.teodora.employeetaskmanager.Activities;
 
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.teodora.employeetaskmanager.Models.TaskModel;
 import com.example.teodora.employeetaskmanager.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
 public class TaskDetailsActivity extends AppCompatActivity {
@@ -25,11 +23,9 @@ public class TaskDetailsActivity extends AppCompatActivity {
     private String priority;
     private LinearLayout statusLayout;
     private DiscreteSeekBar discreteSeekBar;
-
     private int status;
     DatabaseReference databaseTasks;
     private String taskID;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +42,10 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
         databaseTasks = FirebaseDatabase.getInstance().getReference("Tasks");
 
-
         String color = taskModel.getTaskPriority();
         if (color.equals("#e91e63"))priority="High";
         else if (color.equals("#66bb6a")) priority="Medium";
         else if (color.equals("#e2e619")) priority="Low";
-
 
         textView1 = (TextView) findViewById(R.id.txt_assignee);
         textView2 = (TextView) findViewById(R.id.txt_assignedBy);
@@ -62,11 +56,6 @@ public class TaskDetailsActivity extends AppCompatActivity {
         textView7 = (TextView) findViewById(R.id.txt_location);
         textView8 = (TextView) findViewById(R.id.txt_status);
 
-
-//        lblProgress = (TextView) findViewById(R.id.lblProgress);
-
-
-
         textView1.setText(" " + taskModel.getTaskAssignee());
         textView2.setText(" " + taskModel.getTaskAssignedBy());
         textView3.setText(" " + taskModel.getTaskDueDate());
@@ -76,66 +65,24 @@ public class TaskDetailsActivity extends AppCompatActivity {
         textView7.setText(taskModel.getTaskLocation());
         textView8.setText(taskModel.getTaskPercentage());
 
-
-
         statusLayout = (LinearLayout) findViewById(R.id.statusLayout);
-
         statusLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showStatusDialog();
             }
         });
-
     }
 
-
     public void showStatusDialog(){
-
-
-
 
         final AlertDialog.Builder popDialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.dialog_status, null);
         popDialog.setView(dialogView);
+        popDialog.setTitle("Percentage of completed work");
 
-//        SeekBar seek = (SeekBar) dialogView.findViewById(R.id.seekBar);
-
-
-
-//        final SeekBar seek = new SeekBar(this);
-//        seek.setMax(100);
-
-//        popDialog.setIcon(android.R.drawable.btn_star_big_on);
-        popDialog.setTitle("Please select percentage of completed work");
-//        popDialog.setView(seek);
-//
-//        seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
-//                //Do something here with new value
-////                txtView.setText("Value of : " + progress);
-//                textView8.setText(String.valueOf(progress));
-//
-////                lblProgress.setText(String.valueOf(progress));
-//
-//
-//            }
-//
-//            public void onStartTrackingTouch(SeekBar arg0) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//        });
         discreteSeekBar = (DiscreteSeekBar) dialogView.findViewById(R.id.discreteSeekBar);
-
-
-
 
         // Button OK
         popDialog.setPositiveButton("OK",
@@ -143,19 +90,13 @@ public class TaskDetailsActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         status = discreteSeekBar.getProgress();
                         textView8.setText(String.valueOf(status));
-
                         databaseTasks.child(taskID).child("taskPercentage").setValue(String.valueOf(status));
-
                         dialog.dismiss();
                     }
 
                 });
 
-
         popDialog.create();
         popDialog.show();
-
     }
-
 }
-

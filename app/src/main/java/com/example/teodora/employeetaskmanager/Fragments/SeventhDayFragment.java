@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.example.teodora.employeetaskmanager.Activities.TaskDetailsActivity;
 import com.example.teodora.employeetaskmanager.Adapters.ProjectsAdapter;
-import com.example.teodora.employeetaskmanager.Adapters.TasksRecyclerViewAdapter;
 import com.example.teodora.employeetaskmanager.Models.TaskModel;
 import com.example.teodora.employeetaskmanager.Other.FragmentLifecycle;
 import com.example.teodora.employeetaskmanager.Other.RecyclerTouchListener;
@@ -31,12 +30,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
 
 public class SeventhDayFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, FragmentLifecycle {
 
@@ -44,16 +41,11 @@ public class SeventhDayFragment extends Fragment implements SwipeRefreshLayout.O
     private SwipeRefreshLayout swipeRefreshLayout;
     private ArrayList<TaskModel> tasksList = new ArrayList<>();
     private ProjectsAdapter projectsAdapter;
-
-
     private DatabaseReference mDatabaseTasks;
     private FirebaseAuth mAuth;
     private boolean isFirstTime = true;
-
     private String currentUserNameId;
     private String currentDate;
-
-
 
     public SeventhDayFragment() {
         // Required empty public constructor
@@ -65,20 +57,15 @@ public class SeventhDayFragment extends Fragment implements SwipeRefreshLayout.O
 
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy"); // Set your date format
-
         calendar.add(Calendar.DAY_OF_YEAR, 6);
         Date d = calendar.getTime();
         currentDate = sdf.format(d);
-
         mAuth = FirebaseAuth.getInstance();
-
 
         //Search for the exact user that is logged in
         mDatabaseTasks= FirebaseDatabase.getInstance().getReference().child("Tasks");
         currentUserNameId = mAuth.getCurrentUser().getUid();
         mDatabaseTasks.keepSynced(true);
-
-
     }
 
     @Override
@@ -94,12 +81,8 @@ public class SeventhDayFragment extends Fragment implements SwipeRefreshLayout.O
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-
-
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
-
-
         swipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -108,10 +91,6 @@ public class SeventhDayFragment extends Fragment implements SwipeRefreshLayout.O
                                     }
                                 }
         );
-
-
-
-
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -120,7 +99,6 @@ public class SeventhDayFragment extends Fragment implements SwipeRefreshLayout.O
                 Intent taskDetailsIntent = new Intent(getContext(), TaskDetailsActivity.class);
                 taskDetailsIntent.putExtra("taskDetails",tasksList.get(position));
                 startActivity(taskDetailsIntent);
-//                Toast.makeText(getContext(), tasksList.get(position).getTaskAssigneeId() + " is selected!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -130,12 +108,8 @@ public class SeventhDayFragment extends Fragment implements SwipeRefreshLayout.O
         }));
 
         fetchData();
-
-
         return view;
     }
-
-
 
     @Override
     public void onRefresh() {
@@ -154,64 +128,38 @@ public class SeventhDayFragment extends Fragment implements SwipeRefreshLayout.O
 
     private void fetchData() {
         isFirstTime = false;
-
-//        Toast.makeText(getContext(), "vo fetch data", Toast.LENGTH_LONG).show();
         if (checkInternetConnection()){
-
             Query getTasksQuery = mDatabaseTasks.orderByChild("taskDueDate").equalTo(currentDate);
-
             getTasksQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
                     tasksList.clear();
-                    int childrenCount = (int) dataSnapshot.getChildrenCount();
-                    Log.e("DatabaseCount " ,"" + dataSnapshot.getChildrenCount());
-                    Log.e("dataSnapshot " ,"" + dataSnapshot);
-
                     for (DataSnapshot tasksSnapshot : dataSnapshot.getChildren()){
-                        Log.e("tasksSnapshot " ,"" + tasksSnapshot);
-
                         TaskModel taskModel = tasksSnapshot.getValue(TaskModel.class);
                         if (taskModel.getTaskAssigneeId().equals(currentUserNameId))
                         tasksList.add(taskModel);
-                        Log.v("Added to tasksList: ", "tasksAssignee " + taskModel.getTaskDescription());
-                        Log.v("Ova e tasksList: ", " " + tasksList);
-
-
-
                     }
                     projectsAdapter = new ProjectsAdapter(tasksList);
                     swipeRefreshLayout.setRefreshing(false);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                     recyclerView.setAdapter(projectsAdapter);
-
-
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
                     Log.e("Database Error: " ,"No databaseSnapshot caused by" + databaseError);
                     swipeRefreshLayout.setRefreshing(false);
-
                 }
             });
-
-
         }
         else
             Toast.makeText(getContext(), "No Internet connection", Toast.LENGTH_LONG).show();
         swipeRefreshLayout.setRefreshing(false);
     }
-
-
-
     public boolean checkInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
         return (activeNetworkInfo != null && activeNetworkInfo.isAvailable() && activeNetworkInfo.isConnected());
     }
-
 }
 

@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:background="@color/dirty_white"
     android:layout_height="?android:attr/listPreferredItemHeight"
-
+    android:background="@color/dirty_white"
     android:padding="3dip">
 
     <ImageView
-        android:layout_height="35dp"
+        android:id="@+id/imageView"
         android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_person_grey"
         android:padding="5dp"
-        android:id="@+id/imageView" />
+        android:src="@drawable/ic_person_grey" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,28 +24,24 @@
             android:layout_width="fill_parent"
             android:layout_height="0dip"
             android:layout_weight="1"
-
             android:gravity="center_vertical"
+            android:paddingTop="10dp"
             android:text="Demo"
             android:textColor="@color/primaryText"
-            android:textSize="@dimen/very_small_txt_size"
-            android:paddingTop="10dp"/>
+            android:textSize="@dimen/very_small_txt_size" />
 
         <TextView
             android:id="@+id/assignee_email"
             android:layout_width="fill_parent"
             android:layout_height="0dip"
             android:layout_weight="1"
-
-            android:singleLine="true"
             android:ellipsize="marquee"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
             android:text="DemoEmail"
             android:textColor="@color/secondaryText"
-            android:textSize="@dimen/very_very_small_txt_size"
-            android:paddingLeft="5dp"
-            android:paddingBottom="5dp"/>
+            android:textSize="@dimen/very_very_small_txt_size" />
 
     </LinearLayout>
-
 
 </LinearLayout>

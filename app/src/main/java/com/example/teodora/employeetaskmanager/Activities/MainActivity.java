@@ -1,15 +1,15 @@
 package com.example.teodora.employeetaskmanager.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -17,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,13 +31,19 @@ import com.example.teodora.employeetaskmanager.Adapters.MyPagerAdapter;
 import com.example.teodora.employeetaskmanager.Fragments.AssignedTasksFragment;
 import com.example.teodora.employeetaskmanager.Fragments.ContactsFragment;
 import com.example.teodora.employeetaskmanager.Fragments.MyTasksFragment;
+import com.example.teodora.employeetaskmanager.Models.ContactModel;
 import com.example.teodora.employeetaskmanager.Other.CircleTransform;
 import com.example.teodora.employeetaskmanager.Other.FragmentLifecycle;
 import com.example.teodora.employeetaskmanager.R;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -48,19 +55,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtName, txtWebsite;
     private Toolbar toolbar;
     private FloatingActionButton fab;
-
-    // This is for the tabs
     private TabLayout tabLayout;
     private ViewPager pager;
-
-//    private ViewPagerAdapter adapter;
     private MyPagerAdapter pageAdapter;
 
-
-    // urls to load navigation header background image
-    // and profile image
+    // url to load navigation header background image
     private static final String urlNavHeaderBg = "https://www.mojandroid.sk/wp-content/uploads/2014/09/image_new-8.jpg";
-    private static final String urlProfileImg = "https://scontent-vie1-1.xx.fbcdn.net/v/t1.0-9/15085737_995976677179529_3999052350211194170_n.jpg?oh=c76cc2cd3ab8e6e08f771a4f02c3dcb6&oe=5912D794";
 
     // index to identify current nav menu item
     public static int navItemIndex = 0;
@@ -72,20 +72,23 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_NEXTDAYS = "nextdays";
     public static String CURRENT_TAG = TAG_PROFILE;
 
-    // toolbar titles respected to selected nav menu item
-//    private String[] activityTitles;
-
     // flag to load home fragment when user presses back key
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
-
+    private Uri ImageUri = null;
+    private DatabaseReference mDatabaseUsers;
+    private FirebaseAuth mAuth;
+    private StorageReference mStorageImage;
+    private String user_id;
+    private static int GALLERY_REQUEST = 1;
+    private ContactModel contactModel;
+    private StorageReference storageRef;
+    private FirebaseStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
         // Adding Toolbar to Main screen
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -94,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Tabs
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         pageAdapter = new MyPagerAdapter(getSupportFragmentManager());
         pageAdapter.addFragment(new MyTasksFragment(), "MY TASKS");
         pageAdapter.addFragment(new AssignedTasksFragment(), "TASKS");
@@ -102,27 +104,14 @@ public class MainActivity extends AppCompatActivity {
         pager = (ViewPager)findViewById(R.id.viewpager);
         pager.setAdapter(pageAdapter);
         pager.addOnPageChangeListener(pageChangeListener);
-
-//        pager.getCurrentItem();
-
-//        FragmentLifecycle fragmentToShow = (FragmentLifecycle)pageAdapter.getItem(pager.getCurrentItem());
-//        fragmentToShow.onResumeFragment();
-
-
-
-
-
-
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(pager);
         // End tabs
 
         mHandler = new Handler();
-
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         fab = (FloatingActionButton) findViewById(R.id.fab);
-
 
         // Navigation view header
         navHeader = navigationView.getHeaderView(0);
@@ -130,21 +119,6 @@ public class MainActivity extends AppCompatActivity {
         txtWebsite = (TextView) navHeader.findViewById(R.id.website);
         imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
         imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
-
-        // load toolbar titles from string resources
-//        activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
-
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
-
-             // load nav menu header data
-        loadNavHeader();
 
         // initializing navigation menu
         setUpNavigationView();
@@ -154,107 +128,75 @@ public class MainActivity extends AppCompatActivity {
             CURRENT_TAG = TAG_PROFILE;
             loadHomeFragment();
         }
+
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+        mAuth = FirebaseAuth.getInstance();
+        mStorageImage = FirebaseStorage.getInstance().getReference().child("Profile_images");
+        user_id = mAuth.getCurrentUser().getUid();
+        storage = FirebaseStorage.getInstance();
+        setUserContent();
     }
 
+    public void setUserContent(){
 
+        if (checkInternetConnection()){
+            DatabaseReference mDatabaseCurrentUser =  mDatabaseUsers.child(user_id);
+            mDatabaseCurrentUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.v("DataSnapshot: ", " " + dataSnapshot);
+                    contactModel = dataSnapshot.getValue(ContactModel.class);
+                    txtName.setText(contactModel.getName());
+                    txtWebsite.setText(contactModel.getEmail());
+                    if (!(contactModel.getImage().equals("default"))) {
+                        storageRef = storage.getReferenceFromUrl(contactModel.getImage());
+                        Glide.with(getApplicationContext())
+                                .using(new FirebaseImageLoader())
+                                .load(storageRef)
+                                .crossFade()
+                                .thumbnail(0.5f)
+                                .bitmapTransform(new CircleTransform(getApplicationContext()))
+                                .into(imgProfile);
+                        Glide.with(getApplicationContext()).load(urlNavHeaderBg)
+                                .crossFade()
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(imgNavHeaderBg);
+                    }
+                }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.e("Database Error: " ,"No databaseSnapshot caused by" + databaseError);
+                }
+            });
+        }
+        else
+            Toast.makeText(this, "No Internet connection", Toast.LENGTH_LONG).show();
+    }
 
-
-//    //Tabs
-//    private void setupViewPager(ViewPager viewPager) {
-//        adapter = new ViewPagerAdapter(getSupportFragmentManager());
-//        adapter.addFragment(new MyTasksFragment(), "MY TASKS");
-//        adapter.addFragment(new AssignedTasksFragment(), "TASKS");
-//        adapter.addFragment(new ContactsFragment(), "CONTACTS");
-//        viewPager.setAdapter(adapter);
-//
-//    }
-
+    public boolean checkInternetConnection() {
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
+        return (activeNetworkInfo != null && activeNetworkInfo.isAvailable() && activeNetworkInfo.isConnected());
+    }
 
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
 
         int currentPosition = 0;
-
         @Override
         public void onPageSelected(int newPosition) {
-
             FragmentLifecycle fragmentToHide = (FragmentLifecycle)pageAdapter.getItem(currentPosition);
             fragmentToHide.onPauseFragment();
-
             FragmentLifecycle fragmentToShow = (FragmentLifecycle)pageAdapter.getItem(newPosition);
             fragmentToShow.onResumeFragment();
-
             currentPosition = newPosition;
         }
 
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) { }
-
         public void onPageScrollStateChanged(int arg0) { }
     };
 
-
-
-
-
-
-
-//    class ViewPagerAdapter extends FragmentPagerAdapter {
-//        private final List<Fragment> mFragmentList = new ArrayList<>();
-//        private final List<String> mFragmentTitleList = new ArrayList<>();
-//
-//        public ViewPagerAdapter(FragmentManager manager) {
-//            super(manager);
-//        }
-//
-//        @Override
-//        public Fragment getItem(int position) {
-//            return mFragmentList.get(position);
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return mFragmentList.size();
-//        }
-//
-//        public void addFragment(Fragment fragment, String title) {
-//            mFragmentList.add(fragment);
-//            mFragmentTitleList.add(title);
-//        }
-//
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            return mFragmentTitleList.get(position);
-//        }
-//    }
-
-    /***
-     * Load navigation menu header information
-     * like background image, profile image
-     * name, website, notifications action view (dot)
-     */
-    private void loadNavHeader() {
-        // name, website
-        txtName.setText("Teodora Popordanoska");
-        txtWebsite.setText("www.teodorapopordanoska.com");
-
-        // loading header background image
-        Glide.with(this).load(urlNavHeaderBg)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imgNavHeaderBg);
-
-        // Loading profile image
-        Glide.with(this).load(urlProfileImg)
-                .crossFade()
-                .thumbnail(0.5f)
-                .bitmapTransform(new CircleTransform(this))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imgProfile);
-
-        // showing dot next to notifications label
-//        navigationView.getMenu().getItem(3).setActionView(R.layout.menu_dot);
-    }
 
     /***
      * Returns respected fragment that user
@@ -264,16 +206,10 @@ public class MainActivity extends AppCompatActivity {
         // selecting appropriate nav menu item
         selectNavMenu();
 
-        // set toolbar title
-//        setToolbarTitle();
-
         // if user select the current navigation menu again, don't do anything
         // just close the navigation drawer
         if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
             drawer.closeDrawers();
-
-            // show or hide the fab button
-            // toggleFab();
             return;
         }
 
@@ -285,11 +221,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // update the main content by replacing fragments
-//                Fragment fragment = getHomeFragment();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                         android.R.anim.fade_out);
-//                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
                 fragmentTransaction.commitAllowingStateLoss();
             }
         };
@@ -299,47 +233,12 @@ public class MainActivity extends AppCompatActivity {
             mHandler.post(mPendingRunnable);
         }
 
-        // show or hide the fab button
-//        toggleFab();
-
         //Closing drawer on item click
         drawer.closeDrawers();
 
         // refresh toolbar menu
         invalidateOptionsMenu();
     }
-
-//    private Fragment getHomeFragment() {
-//        switch (navItemIndex) {
-//            case 0:
-//                // my profile
-//                MyProfileFragment myProfileFragment = new MyProfileFragment();
-//                return myProfileFragment;
-//            case 1:
-//                // my projects
-//                MyProjectsFragment myProjectsFragment = new MyProjectsFragment();
-//                return myProjectsFragment;
-//            case 2:
-//                // today fragment
-//                TodayFragment todayFragment = new TodayFragment();
-//                return todayFragment;
-//            case 3:
-//                // notifications fragment
-//                NextDaysFragment nextDaysFragment = new NextDaysFragment();
-//                return nextDaysFragment;
-//
-//            case 4:
-//                // settings fragment
-//                SettingsFragment settingsFragment = new SettingsFragment();
-//                return settingsFragment;
-//            default:
-//                return new NextDaysFragment();
-//        }
-//    }
-
-//    private void setToolbarTitle() {
-//        getSupportActionBar().setTitle(activityTitles[navItemIndex]);
-//    }
 
     private void selectNavMenu() {
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
@@ -356,22 +255,6 @@ public class MainActivity extends AppCompatActivity {
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
-//                    case R.id.nav_profile:
-//                        navItemIndex = 0;
-//                        CURRENT_TAG = TAG_PROFILE;
-//                        break;
-//                    case R.id.nav_projects:
-//                        navItemIndex = 1;
-//                        CURRENT_TAG = TAG_PROJECTS;
-//                        break;
-//                    case R.id.nav_today:
-//                        navItemIndex = 2;
-//                        CURRENT_TAG = TAG_TODAY;
-//                        break;
-//                    case R.id.nav_nextDays:
-//                        navItemIndex = 3;
-//                        CURRENT_TAG = TAG_NEXTDAYS;
-//                        break;
                     case R.id.nav_profile:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(MainActivity.this, MyProfileActivity.class));
@@ -498,28 +381,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        // user is in notifications fragment
-        // and selected 'Mark all as Read'
-        if (id == R.id.action_mark_all_read) {
-            Toast.makeText(getApplicationContext(), "All notifications marked as read!", Toast.LENGTH_LONG).show();
-        }
-
-        // user is in notifications fragment
-        // and selected 'Clear All'
-        if (id == R.id.action_clear_notifications) {
-            Toast.makeText(getApplicationContext(), "Clear all notifications!", Toast.LENGTH_LONG).show();
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
-
-
-    // show or hide the fab
-//    private void toggleFab() {
-//        if (navItemIndex == 0)
-//            fab.show();
-//        else
-//            fab.hide();
-//    }
 }

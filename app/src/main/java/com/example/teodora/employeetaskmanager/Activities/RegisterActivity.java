@@ -30,27 +30,20 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText userPassword;
     private EditText userAddress;
     private EditText userMobilePhone;
-
     private Button registerBtn;
-
     private FirebaseAuth mFirebaseAuth;;
     private DatabaseReference mDatabaseUsers;
-
     private ProgressDialog mProgress;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
         userName = (EditText) findViewById(R.id.new_user_name);
         userEmail = (EditText) findViewById(R.id.new_user_email);
         userPassword = (EditText) findViewById(R.id.new_user_pass);
         userAddress = (EditText) findViewById(R.id.new_user_address);
         userMobilePhone = (EditText) findViewById(R.id.new_user_phone);
-
         registerBtn = (Button) findViewById(R.id.registerBtn);
 
         // Initialize Firebase
@@ -74,7 +67,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void startRegister(){
-
         final String name = userName.getText().toString().trim();
         final String email = userEmail.getText().toString().trim();
         String password = userPassword.getText().toString().trim();
@@ -104,8 +96,6 @@ public class RegisterActivity extends AppCompatActivity {
                                 current_user_db.child("Address").setValue(address);
                                 current_user_db.child("MobilePhone").setValue(mobilePhone);
                                 current_user_db.child("Image").setValue("default");
-
-                                Log.v("E_VALUE", "Editor(SharedPreferences): " + name +" "+ email +" " + "default");
 
                                 mProgress.dismiss();
 

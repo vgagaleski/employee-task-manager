@@ -8,10 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.example.teodora.employeetaskmanager.Models.ContactModel;
 import com.example.teodora.employeetaskmanager.R;
-
 import java.util.List;
 
 public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRecyclerViewAdapter.MyViewHolder> {
@@ -29,7 +27,6 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         }
     }
 
-
     public ContactsRecyclerViewAdapter(Context context, List<ContactModel> contactInfosList) {
         this.contactModelList = contactInfosList;
         this.mContext = context;
@@ -45,21 +42,12 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
 
     @Override
     public void onBindViewHolder(ContactsRecyclerViewAdapter.MyViewHolder holder, int position) {
-
-        Log.v("vo BingHolder: ", " " + "");
         ContactModel contactModel = contactModelList.get(position);
         holder.contactUserName.setText(contactModel.getName());
-
     }
 
     @Override
     public int getItemCount() {
         return contactModelList.size();
     }
-
-
-
-
-
-
 }
